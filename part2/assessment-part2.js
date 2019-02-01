@@ -12,20 +12,20 @@
 // Chain these functions off of $http (do not put them in variables)
 // The response object will look like this :
 /*
-    {
-      data: [
-        {
-      		email: "awilliams0@intel.com",
-      		first_name: "Alan",
-      		gender: "Male",
-      		id: 1,
-      		last_name: "Williams"
-        },
-        {
-          //...
-        }
-      ]
-    }
+	{
+	data: [
+		{
+			email: "awilliams0@intel.com",
+			first_name: "Alan",
+			gender: "Male",
+			id: 1,
+			last_name: "Williams"
+		},
+		{
+		//...
+		}
+	]
+	}
 */
 
 // In the first .then function you use, assign the first user object (located in the response object)
@@ -38,16 +38,22 @@ var firstUser = 'don\'t touch this string!';
 var thirdUser = 'don\'t touch this string, either!';
 
 function noWeakLink() {
-
-  return $http({
-    method: 'GET',
-    url: '/api/users'
-  })
-  // CODE HERE...
+	return $http({
+		method: 'GET',
+		url: '/api/users'
+	})
+	.then(response=>{
+		console.log(response)
+		firstUser = response.data[0]
+		return response
+	})
+	.then(response=>{
+		console.log(response)
+		thirdUser = response.data[2]
+		return response.data[9]
+	})
 
 }
-
-
 
 // *************
 // * PROBLEM 2 *
@@ -73,7 +79,7 @@ function large() {
 
   return 'My name is ' + this.name + ' and I am very heavy!'
 }
-// CODE HERE...
+var boundToElephant = large.bind(elephant)
 
 
 
@@ -87,7 +93,10 @@ function large() {
 // Use explicit binding to give capacity the context of crew
 // and return the bound function.
 
-// CODE HERE...
+const deathStar = (capacity, crew) => {
+	capacity = capacity.bind(crew)
+	return capacity
+}
 
 
 
@@ -102,7 +111,11 @@ function large() {
 // The closure function will take in a parameter: liabilities (Number)
 // The closure function will return the combined value of assets and liabilities.
 
-// CODE HERE...
+const accountingOffice = (assets) => {
+	return function(liabilities){
+		return assets + liabilities
+	}
+}
 
 
 
@@ -127,7 +140,16 @@ function large() {
 //     remember: << array of items to be remembered >>
 // };
 
-// CODE HERE...
+const forgetter = (name) => {
+	const items = []
+	return function rememberall(item){
+		items.push(item)
+		return {
+			name: name,
+			remember: items
+			};
+	}
+}
 
 
 
@@ -155,4 +177,29 @@ function large() {
 
 // NOTE: Neither hunger nor danger should be able to exceed 100 or drop below 0.
 
-// CODE HERE...
+const frodo = (startingHungerValue, startingDangerValue) => {
+	let hunger = startingHungerValue
+	let danger = startingDangerValue
+	return {
+		dinnerOverFire: function(){
+			if(hunger>=25){hunger -= 25}
+			else{hunger=0}
+			if(danger<=60){danger += 40}
+			else{danger=100}
+			return {
+				hunger,
+				danger
+			}
+		},
+		hidingInBush: function(){
+			if(hunger<=65){hunger += 35}
+			else{hunger=100}
+			if(danger>=20){danger -= 20}
+			else{danger=0}
+			return {
+				hunger,
+				danger
+			}
+		}
+	}
+}
